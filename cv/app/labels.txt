@@ -1,0 +1,11 @@
+Apple
+Banana
+Bittergourd
+Capsicum
+Cucumber
+Fresh
+Okra
+Orange
+Potato
+Rotten
+Tomato
