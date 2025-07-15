@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: sans-serif;
   background: rgb(255, 255, 255);
   min-height: 100vh;
 }
@@ -238,7 +238,7 @@ body {
   color: #721c24;
   padding: 1rem;
   border-radius: 10px;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
   border: 1px solid #f5c6cb;
   display: flex;
   align-items: center;
@@ -277,7 +277,7 @@ body {
   border: 1px solid #c3e6cb;
 }
 
-.status-card.stale {
+.status-card.rotten {
   background: linear-gradient(135deg, #f8d7da, #f5c6cb);
   border: 1px solid #f5c6cb;
 }
@@ -380,7 +380,7 @@ body {
   background: linear-gradient(90deg, #28a745, #20c997);
 }
 
-.prediction-card.stale .prediction-fill {
+.prediction-card.rotten .prediction-fill {
   background: linear-gradient(90deg, #dc3545, #e74c3c);
 }
 
