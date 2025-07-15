@@ -1,0 +1,51 @@
+Récap consignes projet :
+
+Répondre à un cas d'usage / besoin / problème précis pour UN thème avec :
+
+une partie CV
+une partie apprentissage (supervisé ?) dite "ML"
+
+A trouver :
+ 
+un dataset pour la partie CV
+un dataset pour la partie "ML" (format "tabulaire")
+
+Faire schéma (diagramme sur draw.io) :
+ 
+code couleur pour différencier ce qui tourne en local vs. sur le cloud
+bien séparer les parties "train" et "test"
+
+- Computer vision en containers (simuler local)
+ 
+- Azure Machine (train model data) utiliser l'interference
+ 
+- Website acceder UI service (API cloud / local)
+
+
+Notre premier dataset est un dataset d'image de fruits et legumes sain et pourri
+https://www.kaggle.com/datasets/swoyam2609/fresh-and-stale-classification
+
+Notre deuxieme dataset est un dataset tabulaire de prix de fruits et legumes. farmprice, atlantretail, chicagoretail, losangelesretail, newyorkretail, averagespread
+https://www.kaggle.com/datasets/everydaycodings/produce-prices-dataset
+
+Pour la partie CV : Détection automatique sain/pourri
+
+Pour la partie ML : Prédiction des pertes financières basée sur :
+Type de fruit/légume
+Prix actuel du marché (les données)
+Écart entre prix farm/retail (indicateur de marge)
+Région géographique
+Saisonnalité (mois/saison)
+
+Variable possibles
+- Marge commerciale = retail_price - farm_price
+- Volatilité des prix = écart-type des prix sur période
+- Index de rentabilité = (retail_price - farm_price) / farm_price
+- Coût de la détérioration = prix_retail × pourcentage_pourri
+
+Prédictions utiles :
+Seuil de rentabilité : À quel moment arrêter de vendre un produit qui se détériore
+Stratégies de pricing : Réduction progressive selon l'état du produit
+Volumes optimaux : Combien commander selon les patterns de détérioration
+
+
