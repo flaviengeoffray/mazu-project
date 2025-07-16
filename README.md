@@ -15,3 +15,16 @@ npm install
 
 npm start
 ```
+
+
+
+```bash
+cd proxy
+
+echo ENDPOINT_URL=<your_url>
+ENDPOINT_AUTH_TOKEN=<your_token> > .env
+
+npm install
+
+npm run dev
+```

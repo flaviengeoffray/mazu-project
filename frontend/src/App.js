@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -10,14 +10,55 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [selectedRegion, setSelectedRegion] = useState('Paris');
-  const [selectedSeason, setSelectedSeason] = useState('Automne');
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
-  // Prix de base par région et saison (données d'exemple)
-  const basePrices = {
-    'Paris': { 'Printemps': 1.2, 'Été': 1.0, 'Automne': 1.1, 'Hiver': 1.3 },
-    'Lyon': { 'Printemps': 1.1, 'Été': 0.9, 'Automne': 1.0, 'Hiver': 1.2 },
-    'Marseille': { 'Printemps': 1.0, 'Été': 0.8, 'Automne': 0.9, 'Hiver': 1.1 },
-    'Toulouse': { 'Printemps': 1.05, 'Été': 0.85, 'Automne': 0.95, 'Hiver': 1.15 }
+  const [priceLoading, setPriceLoading] = useState(false);
+
+  const priceCacheRef = useRef({});
+
+  const getSeasonFromDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    
+    if (month >= 3 && month <= 5) return 'Printemps';
+    if (month >= 6 && month <= 8) return 'Été';
+    if (month >= 9 && month <= 11) return 'Automne';
+    return 'Hiver';
+  }
+
+  const fetchPriceFromAPI = async (fruit, city, date) => {
+    const cacheKey = `${fruit}_${city}_${date}`;
+    
+    if (priceCacheRef.current[cacheKey]) {
+      return priceCacheRef.current[cacheKey];
+    }
+
+    try {
+      setPriceLoading(true);
+      
+      const response = await axios.post('http://localhost:5050/api/score', {
+        Inputs: {
+          input1: [
+            { productname: fruit, date: date, city: city },
+            { productname: fruit, date: date, city: 'Farm' }
+          ]
+        }
+      });
+
+      const basePriceData = response.data.Results.WebServiceOutput0[0].cityPrice;
+      const farmPriceData = response.data.Results.WebServiceOutput0[1].cityPrice;
+      const priceData = {basePrice: basePriceData, farmPrice: farmPriceData}
+      
+
+      priceCacheRef.current[cacheKey] = priceData;
+      
+      return priceData;
+    } catch (error) {
+      console.error('Erreur lors de la récupération du prix:', error);
+      throw new Error(`Impossible de récupérer le prix pour ${fruit} à ${city}`);
+    } finally {
+      setPriceLoading(false);
+    }
   };
 
   const handleFileChange = (event) => {
@@ -83,20 +124,34 @@ function App() {
     }
   };
 
-  const calculatePrice = (predictions) => {
-    if (!predictions || predictions.length === 0) return { basePrice: 0, finalPrice: 0, penalty: 0 };
+  const calculatePrice = async (predictions) => {
+    if (!predictions || predictions.length === 0) {
+      return { basePrice: 0, finalPrice: 0, penalty: 0};
+    }
     
     // Trouver le produit détecté (hors fresh/rotten)
     const productPredictions = predictions.filter(p => 
       p.tagName.toLowerCase() !== 'fresh' && p.tagName.toLowerCase() !== 'rotten'
     );
     
-    if (productPredictions.length === 0) return { basePrice: 0, finalPrice: 0, penalty: 0 };
+    if (productPredictions.length === 0) {
+      return { basePrice: 0, finalPrice: 0, penalty: 0};
+    }
     
-    const product = productPredictions[0];
-    const basePrice = basePrices[selectedRegion][selectedSeason];
+    const product = getPredictionName(productPredictions);
     
-    // Calculer la pénalité basée sur la probabilité de pourriture
+    let basePrice;
+    let farmPrice;
+    
+    try {
+      const apiPriceData = await fetchPriceFromAPI(product, selectedRegion, selectedDate);
+      basePrice = apiPriceData.basePrice || 0;
+      farmPrice = apiPriceData.farmPrice || 0;
+    } catch (error) {
+      console.warn('Error', error.message);
+    }
+
+    
     const rottenPrediction = predictions.find(p => p.tagName.toLowerCase() === 'rotten');
     const rottenProbability = rottenPrediction ? rottenPrediction.probability : 0;
     const penalty = rottenProbability;
@@ -106,7 +161,10 @@ function App() {
       basePrice,
       finalPrice: Math.max(0, finalPrice),
       penalty,
-      product: product.tagName
+      product: product,
+      date: selectedDate,
+      season: getSeasonFromDate(selectedDate),
+      farmPrice
     };
   };
 
@@ -127,8 +185,8 @@ function App() {
       
       try {
         const predictions = await analyzeSingleImage(file);
-        const priceInfo = calculatePrice(predictions);
-        
+        const priceInfo = await calculatePrice(predictions);
+
         results.push({
           ...file,
           predictions,
@@ -160,6 +218,7 @@ function App() {
     setSelectedImageIndex(null);
     setError('');
     setAnalysisProgress(0);
+    priceCacheRef.current = {};
   };
 
   const getPredictionStatus = (predictions) => {
@@ -237,16 +296,16 @@ function App() {
               </select>
             </div>
             <div className="config-item">
-              <label>Saison:</label>
-              <select 
-                value={selectedSeason} 
-                onChange={(e) => setSelectedSeason(e.target.value)}
-              >
-                <option value="Printemps">Printemps</option>
-                <option value="Été">Été</option>
-                <option value="Automne">Automne</option>
-                <option value="Hiver">Hiver</option>
-              </select>
+                <label>Date d'analyse:</label>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                  max={new Date().toISOString().split('T')[0]}
+                />
+                <small className="date-helper">
+                  Saison: {getSeasonFromDate(selectedDate)}
+                </small>
             </div>
           </div>
         </div>
@@ -387,12 +446,12 @@ function App() {
                     </span>
                   </div>
                   <div className="summary-item">
-                    <span className="summary-label">Région:</span>
-                    <span className="summary-value">{selectedRegion}</span>
+                    <span className="summary-label">Date d'analyse:</span>
+                    <span className="summary-value">{selectedDate}</span>
                   </div>
                   <div className="summary-item">
                     <span className="summary-label">Saison:</span>
-                    <span className="summary-value">{selectedSeason}</span>
+                    <span className="summary-value">{getSeasonFromDate(selectedDate)}</span>
                   </div>
                 </div>
               </div>
@@ -431,6 +490,7 @@ function App() {
                           <h4>Informations de Prix</h4>
                           <div className="price-details">
                             <p><strong>Produit détecté:</strong> {getPredictionName(selectedImageData.predictions)}</p>
+                            <p><strong>Prix de la ferme:</strong> {selectedImageData.priceInfo.farmPrice.toFixed(2)}€</p>
                             <p><strong>Prix de base:</strong> {selectedImageData.priceInfo.basePrice.toFixed(2)}€</p>
                             <p><strong>Prix final:</strong> {selectedImageData.priceInfo.finalPrice.toFixed(2)}€</p>
                             <p><strong>Pénalité:</strong> {(selectedImageData.priceInfo.penalty * 100).toFixed(2)}%</p>
