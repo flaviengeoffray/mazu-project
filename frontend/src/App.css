@@ -426,6 +426,7 @@ body {
   border-radius: 12px;
   margin-bottom: 1rem;
   border: 1px solid #d0d0d0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .config-section h2 {
