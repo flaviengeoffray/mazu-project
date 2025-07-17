@@ -268,7 +268,6 @@ body {
   gap: 1rem;
   padding: 1rem;
   border-radius: 12px;
-  margin-bottom: 2rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
@@ -422,17 +421,17 @@ body {
 
 /* Configuration Section */
 .config-section {
-  background: #f8f9fa;
-  padding: 1.5rem;
+  background: #ffffff;
+  padding: 1rem;
   border-radius: 12px;
-  margin-bottom: 2rem;
-  border: 1px solid #e9ecef;
+  margin-bottom: 1rem;
+  border: 1px solid #d0d0d0;
 }
 
 .config-section h2 {
   margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.25rem;
+  color: #000000;
+  font-size: 1.2rem;
 }
 
 .config-grid {
@@ -448,8 +447,8 @@ body {
 }
 
 .config-item label {
-  font-weight: 600;
-  color: #555;
+  font-weight: 500;
+  color: #262626;
   font-size: 0.9rem;
 }
 
@@ -459,13 +458,28 @@ body {
   border-radius: 8px;
   font-size: 1rem;
   background: white;
-  color: #333;
+  color: #1b1b1b;
 }
 
 .config-item select:focus {
   outline: none;
   border-color: #4CAF50;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.config-item input[type="date"] {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #333;
+}
+
+.date-helper {
+  font-size: 0.8rem;
+  color: #464646;
+  margin-top: 0.25rem;
 }
 
 /* Upload Area for Batch */
@@ -490,14 +504,14 @@ body {
 
 .images-preview-section h2 {
   margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.25rem;
+  color: #000000;
+  font-size: 1.2rem;
 }
 
 .images-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 1rem;
+  gap: 0.8rem;
   margin-top: 1rem;
 }
 
@@ -621,9 +635,9 @@ body {
 }
 
 .batch-results-section h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #000000;
+  font-size: 1.2rem;
 }
 
 /* Financial Summary */
@@ -633,23 +647,23 @@ body {
 
 .summary-card {
   background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
-  border: 1px solid #e9ecef;
-  border-radius: 16px;
-  padding: 2rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .summary-card h3 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #000000;
+  font-size: 1rem;
   text-align: center;
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 0.6rem;
 }
 
 .summary-item {
@@ -681,17 +695,17 @@ body {
 /* Selected Image Detail */
 .selected-image-detail {
   background: white;
-  border: 1px solid #e9ecef;
-  border-radius: 16px;
-  padding: 2rem;
-  margin-top: 2rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1em;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .selected-image-detail h3 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: #000000;
+  font-size: 1rem;
   border-bottom: 2px solid #4CAF50;
   padding-bottom: 0.5rem;
 }
@@ -699,7 +713,7 @@ body {
 .detail-content {
   display: grid;
   grid-template-columns: 300px 1fr;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .detail-image {
@@ -716,20 +730,20 @@ body {
 .detail-info {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .price-info {
   background: #f8f9fa;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 12px;
   border: 1px solid #e9ecef;
 }
 
 .price-info h4 {
-  margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #000000;
+  font-size: 1rem;
 }
 
 .price-details {
@@ -745,21 +759,21 @@ body {
 
 .predictions-details {
   background: #f8f9fa;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: 12px;
   border: 1px solid #e9ecef;
 }
 
 .predictions-details h4 {
-  margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #000000;
+  font-size: 1rem;
 }
 
 .predictions-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.2rem;
 }
 
 .prediction-item {
@@ -779,7 +793,7 @@ body {
 
 .prediction-probability {
   font-weight: 700;
-  color: #4CAF50;
+  color: #484848;
 }
 
 .error-detail {
@@ -794,7 +808,7 @@ body {
 @media (max-width: 768px) {
   .detail-content {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.6rem;
   }
   
   .detail-image {
